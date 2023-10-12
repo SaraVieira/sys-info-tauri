@@ -4,7 +4,7 @@ import "./index.css";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <MantineProvider defaultColorScheme="dark">
     <App />
   </MantineProvider>

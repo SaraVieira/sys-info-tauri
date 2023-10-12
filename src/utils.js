@@ -11,7 +11,7 @@ export const cleanDisks = async (disks) =>
     return true;
   });
 
-export const bytesToSize = (bytes: number) => {
+export const bytesToSize = (bytes) => {
   const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   if (bytes === 0) return "n/a";
   const i = parseInt(

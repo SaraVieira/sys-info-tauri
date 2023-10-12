@@ -1,18 +1,6 @@
 import { Avatar, Text, Group } from "@mantine/core";
 
-interface SystemInfoProps {
-  name: string;
-  host_name: string;
-  kernel_version: string;
-  os_version: string;
-}
-
-export function SystemInfo({
-  name,
-  host_name,
-  kernel_version,
-  os_version,
-}: SystemInfoProps) {
+export function SystemInfo({ name, host_name, kernel_version, os_version }) {
   return (
     <div>
       <Group wrap="nowrap" mb={40}>

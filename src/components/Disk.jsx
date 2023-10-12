@@ -1,17 +1,7 @@
-import { Progress, Text, Group, Paper, Flex } from "@mantine/core";
+import { Progress, Text, Paper, Flex } from "@mantine/core";
 import { IconDeviceSdCard, IconDeviceTablet } from "@tabler/icons-react";
 
-interface DiskProps {
-  name: string;
-  ssd?: boolean;
-  data: {
-    label: string;
-    part: number;
-    color: string;
-  }[];
-}
-
-export function Disk({ name, data, ssd }: DiskProps) {
+export function Disk({ name, data, ssd }) {
   const Icon = ssd ? IconDeviceSdCard : IconDeviceTablet;
   return (
     <Paper withBorder p="md" radius="md" style={{ flexGrow: 1 }}>

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import { invoke } from "@tauri-apps/api";
 import { Disk } from "./components/Disk";
 import { Button, Flex, Skeleton, Text } from "@mantine/core";
