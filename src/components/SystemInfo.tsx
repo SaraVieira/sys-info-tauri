@@ -1,17 +1,4 @@
-import { createStyles, Avatar, Text, Group } from "@mantine/core";
-
-const useStyles = createStyles((theme) => ({
-  icon: {
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[3]
-        : theme.colors.gray[5],
-  },
-
-  name: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-  },
-}));
+import { Avatar, Text, Group } from "@mantine/core";
 
 interface SystemInfoProps {
   name: string;
@@ -26,10 +13,9 @@ export function SystemInfo({
   kernel_version,
   os_version,
 }: SystemInfoProps) {
-  const { classes } = useStyles();
   return (
     <div>
-      <Group noWrap mb={40}>
+      <Group wrap="nowrap" mb={40}>
         <Avatar
           src={
             "https://e7.pngegg.com/pngimages/217/562/png-clipart-macbook-pro-macos-high-sierra-macos-sierra-content-text-computer.png"
@@ -42,19 +28,19 @@ export function SystemInfo({
             {host_name}
           </Text>
 
-          <Text fz="lg" fw={500} className={classes.name}>
+          <Text fz="lg" fw={500}>
             {name}
           </Text>
 
-          <Group noWrap spacing={10} mt={3}>
+          <Group wrap="nowrap" mt={3}>
             <Text fz="xs" c="dimmed">
               Version: {os_version}
             </Text>
           </Group>
 
-          <Group noWrap spacing={10} mt={5}>
+          <Group wrap="nowrap" mt={5}>
             <Text fz="xs" c="dimmed">
-              Kernel Version:{kernel_version}
+              Kernel Version: {kernel_version}
             </Text>
           </Group>
         </div>

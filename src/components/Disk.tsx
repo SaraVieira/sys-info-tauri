@@ -1,20 +1,5 @@
-import { createStyles, Progress, Text, Group, Paper } from "@mantine/core";
+import { Progress, Text, Group, Paper, Flex } from "@mantine/core";
 import { IconDeviceSdCard, IconDeviceTablet } from "@tabler/icons-react";
-
-const useStyles = createStyles((theme) => ({
-  progressLabel: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    lineHeight: 1,
-    fontSize: theme.fontSizes.sm,
-  },
-
-  icon: {
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[3]
-        : theme.colors.gray[4],
-  },
-}));
 
 interface DiskProps {
   name: string;
@@ -27,34 +12,39 @@ interface DiskProps {
 }
 
 export function Disk({ name, data, ssd }: DiskProps) {
-  const { classes } = useStyles();
   const Icon = ssd ? IconDeviceSdCard : IconDeviceTablet;
   return (
     <Paper withBorder p="md" radius="md" style={{ flexGrow: 1 }}>
-      <Group position="apart">
-        <Group align="flex-end" spacing="xs">
-          <Text fz="xl" fw={700}>
-            {name}
-          </Text>
-        </Group>
-
-        <Icon size="1.4rem" className={classes.icon} stroke={1.5} />
-      </Group>
+      <Flex justify="space-between" align="center">
+        <Text fz="xl" fw={700}>
+          {name}
+        </Text>
+        <Icon size="1.4rem" stroke={1.5} />
+      </Flex>
 
       <Text c="dimmed" fz="sm">
         {data[1].label} of {data[0].label} free
       </Text>
 
-      <Progress
-        sections={data.map((segment) => ({
-          value: segment.part,
-          color: segment.color,
-          label: segment.part > 10 ? segment.label : undefined,
-        }))}
-        size={34}
-        classNames={{ label: classes.progressLabel }}
-        mt={20}
-      />
+      <Progress.Root size={34} mt={20}>
+        {data.map((segment) => (
+          <Progress.Section
+            key={segment.label}
+            value={segment.part}
+            color={segment.color}
+          >
+            {segment.part > 10 && (
+              <Progress.Label
+                style={{
+                  fontSize: 12,
+                }}
+              >
+                {segment.label}
+              </Progress.Label>
+            )}
+          </Progress.Section>
+        ))}
+      </Progress.Root>
     </Paper>
   );
 }

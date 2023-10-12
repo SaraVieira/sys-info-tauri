@@ -5,21 +5,11 @@ import { Disk } from "./components/Disk";
 import { Button, Flex, Skeleton, Text } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { SystemInfo } from "./components/SystemInfo";
-
-function bytesToSize(bytes: number) {
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-  if (bytes === 0) return "n/a";
-  const i = parseInt(
-    Math.floor(Math.log(bytes) / Math.log(1024)).toString(),
-    10
-  );
-  if (i === 0) return `${bytes} ${sizes[i]})`;
-  return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
-}
+import { bytesToSize, cleanDisks } from "./utils";
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [system, setSystem] = useState<any>({});
+  const [info, setInfo] = useState({});
 
   useEffect(() => {
     refresh();
@@ -28,14 +18,18 @@ function App() {
   const refresh = async () => {
     setLoading(true);
     const system = await invoke("refresh_info");
-    setSystem(system);
+    const disks = await cleanDisks(system.disks);
+    setInfo({
+      ...system,
+      disks,
+    });
     setLoading(false);
   };
 
   return (
     <>
       <Flex mb={40} justify={"space-between"}>
-        <SystemInfo {...system.system} />
+        <SystemInfo {...info.system} />
         <Button
           loading={loading}
           onClick={refresh}
@@ -45,36 +39,10 @@ function App() {
           Refresh
         </Button>
       </Flex>
+      <Text fz="28px" my={20} fw={700}>
+        Disks
+      </Text>
       <Skeleton visible={loading}>
-        {system.system && (
-          <Disk
-            name={"Memory"}
-            data={[
-              {
-                label: bytesToSize(system.system.total_memory),
-                part: +(
-                  (system.system.used_memory / system.system.total_memory) *
-                  100
-                ).toFixed(1),
-                color: "red",
-              },
-              {
-                label: bytesToSize(
-                  system.system.total_memory - system.system.used_memory
-                ),
-                part: +(
-                  ((system.system.total_memory - system.system.used_memory) /
-                    system.system.total_memory) *
-                  100
-                ).toFixed(1),
-                color: "green",
-              },
-            ]}
-          />
-        )}
-        <Text fz="28px" my={20} fw={700}>
-          Disks
-        </Text>
         <Flex
           gap="md"
           justify="center"
@@ -82,10 +50,11 @@ function App() {
           direction="row"
           wrap="wrap"
         >
-          {system?.disks?.length &&
-            system?.disks.map((disk) => (
+          {info?.disks?.length &&
+            info?.disks.map((disk) => (
               <>
                 <Disk
+                  key={disk.name}
                   name={disk.name}
                   ssd={disk.is_removable}
                   data={[

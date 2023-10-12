@@ -11,7 +11,7 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, Debug)]
 struct Disk {
     name: String,
     file_system: Vec<u8>,
@@ -22,8 +22,6 @@ struct Disk {
 }
 #[derive(serde::Serialize)]
 struct ReturnSystem {
-    total_memory: u64,
-    used_memory: u64,
     name: Option<String>,
     kernel_version: Option<String>,
     os_version: Option<String>,
@@ -40,7 +38,7 @@ fn get_info() -> CustomResponse {
     let mut disks = vec![];
     let mut sys = System::new_all();
 
-    sys.refresh_all();
+    sys.refresh_disks();
 
     for disk in sys.disks() {
         disks.push(Disk {
@@ -54,18 +52,13 @@ fn get_info() -> CustomResponse {
     }
 
     let system = ReturnSystem {
-        total_memory: sys.total_memory(),
-        used_memory: sys.used_memory(),
         name: sys.name(),
         kernel_version: sys.kernel_version(),
         os_version: sys.os_version(),
         host_name: sys.host_name(),
     };
 
-    CustomResponse {
-        disks: disks,
-        system: system,
-    }
+    CustomResponse { disks, system }
 }
 
 #[tauri::command]
