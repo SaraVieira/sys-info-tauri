@@ -4,7 +4,7 @@ import { Disk } from "./components/Disk";
 import { Button, Flex, Skeleton, Text } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { SystemInfo } from "./components/SystemInfo";
-import { bytesToSize, cleanDisks } from "./utils";
+import { cleanDisks } from "./utils";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -52,31 +52,7 @@ function App() {
           {info?.disks?.length &&
             info?.disks.map((disk) => (
               <>
-                <Disk
-                  key={disk.name}
-                  name={disk.name}
-                  ssd={disk.is_removable}
-                  data={[
-                    {
-                      label: bytesToSize(
-                        disk.total_space - disk.available_space
-                      ),
-                      part: +(
-                        100 -
-                        (disk.available_space / disk.total_space) * 100
-                      ).toFixed(1),
-                      color: "red",
-                    },
-                    {
-                      label: bytesToSize(disk.available_space),
-                      part: +(
-                        (disk.available_space / disk.total_space) *
-                        100
-                      ).toFixed(1),
-                      color: "transparent",
-                    },
-                  ]}
-                />
+                <Disk key={disk.name} disk={disk} />
               </>
             ))}
         </Flex>

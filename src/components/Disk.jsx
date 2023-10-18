@@ -1,13 +1,27 @@
 import { Progress, Text, Paper, Flex } from "@mantine/core";
 import { IconDeviceSdCard, IconDeviceTablet } from "@tabler/icons-react";
+import { bytesToSize } from "../utils";
 
-export function Disk({ name, data, ssd }) {
-  const Icon = ssd ? IconDeviceSdCard : IconDeviceTablet;
+export function Disk({ disk }) {
+  const Icon = disk.is_removable ? IconDeviceSdCard : IconDeviceTablet;
+
+  const data = [
+    {
+      label: bytesToSize(disk.total_space - disk.available_space),
+      part: +(100 - (disk.available_space / disk.total_space) * 100).toFixed(1),
+      color: "red",
+    },
+    {
+      label: bytesToSize(disk.available_space),
+      part: +((disk.available_space / disk.total_space) * 100).toFixed(1),
+      color: "transparent",
+    },
+  ];
   return (
     <Paper withBorder p="md" radius="md" style={{ flexGrow: 1 }}>
       <Flex justify="space-between" align="center">
         <Text fz="xl" fw={700}>
-          {name}
+          {disk.name}
         </Text>
         <Icon size="1.4rem" stroke={1.5} />
       </Flex>
