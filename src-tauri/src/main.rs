@@ -11,57 +11,11 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-#[derive(serde::Serialize, Debug)]
-struct Disk {
-    name: String,
-    file_system: Vec<u8>,
-    mount_point: PathBuf,
-    total_space: u64,
-    available_space: u64,
-    is_removable: bool,
-}
-#[derive(serde::Serialize)]
-struct ReturnSystem {
-    name: Option<String>,
-    kernel_version: Option<String>,
-    os_version: Option<String>,
-    host_name: Option<String>,
-}
-
-#[derive(serde::Serialize)]
-struct SystemInfo {
-    system: ReturnSystem,
-    disks: Vec<Disk>,
-}
-
-fn get_info() -> SystemInfo {
-    let mut disks = vec![];
-    let mut sys = System::new_all();
-
-    sys.refresh_disks();
-
-    for disk in sys.disks() {
-        disks.push(Disk {
-            name: disk.name().to_str().unwrap().to_string(),
-            file_system: disk.file_system().to_vec(),
-            mount_point: disk.mount_point().to_path_buf(),
-            total_space: disk.total_space(),
-            available_space: disk.available_space(),
-            is_removable: disk.is_removable(),
-        })
-    }
-
-    let system = ReturnSystem {
-        name: sys.name(),
-        kernel_version: sys.kernel_version(),
-        os_version: sys.os_version(),
-        host_name: sys.host_name(),
-    };
-
-    SystemInfo { disks, system }
+fn get_info() -> String {
+    String::from("Hello from rust")
 }
 
 #[tauri::command]
-fn system_info() -> SystemInfo {
+fn system_info() -> String {
     get_info()
 }
