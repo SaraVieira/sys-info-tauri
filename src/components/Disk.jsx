@@ -2,7 +2,7 @@ import { Progress, Text, Paper, Flex } from "@mantine/core";
 import { IconDeviceSdCard, IconDeviceTablet } from "@tabler/icons-react";
 import { bytesToSize } from "../utils";
 
-export function Disk({ disk }) {
+export function Disk(disk) {
   const Icon = disk.is_removable ? IconDeviceSdCard : IconDeviceTablet;
 
   const data = [
@@ -23,7 +23,7 @@ export function Disk({ disk }) {
         <Text fz="xl" fw={700}>
           {disk.name}
         </Text>
-        <Icon size="1.4rem" stroke={1.5} />
+        <Icon size={20} stroke={1.5} />
       </Flex>
 
       <Text c="dimmed" fz="sm">

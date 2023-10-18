@@ -6,7 +6,7 @@ use sysinfo::{System, SystemExt};
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![refresh_info, system_info])
+        .invoke_handler(tauri::generate_handler![system_info])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -29,12 +29,12 @@ struct ReturnSystem {
 }
 
 #[derive(serde::Serialize)]
-struct CustomResponse {
+struct SystemInfo {
     system: ReturnSystem,
     disks: Vec<Disk>,
 }
 
-fn get_info() -> CustomResponse {
+fn get_info() -> SystemInfo {
     let mut disks = vec![];
     let mut sys = System::new_all();
 
@@ -58,15 +58,10 @@ fn get_info() -> CustomResponse {
         host_name: sys.host_name(),
     };
 
-    CustomResponse { disks, system }
+    SystemInfo { disks, system }
 }
 
 #[tauri::command]
-fn system_info() -> CustomResponse {
-    get_info()
-}
-
-#[tauri::command]
-fn refresh_info() -> CustomResponse {
+fn system_info() -> SystemInfo {
     get_info()
 }

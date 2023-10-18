@@ -2,21 +2,21 @@ import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api";
 import { Disk } from "./components/Disk";
 import { Button, Flex, Skeleton, Text } from "@mantine/core";
-import { IconRefresh } from "@tabler/icons-react";
 import { SystemInfo } from "./components/SystemInfo";
 import { cleanDisks } from "./utils";
 
-function App() {
+const useSystemInfo = () => {
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState({});
 
   useEffect(() => {
-    refresh();
+    getSystemInfo();
   }, []);
 
-  const refresh = async () => {
+  const getSystemInfo = async () => {
     setLoading(true);
-    const system = await invoke("refresh_info");
+    const system = await invoke("system_info");
+
     const disks = await cleanDisks(system.disks);
     setInfo({
       ...system,
@@ -25,16 +25,20 @@ function App() {
     setLoading(false);
   };
 
+  return {
+    loading,
+    info,
+    getSystemInfo,
+  };
+};
+
+function App() {
+  const { loading, info, getSystemInfo } = useSystemInfo();
   return (
     <>
-      <Flex mb={40} justify={"space-between"}>
+      <Flex mb={40} justify="space-between">
         <SystemInfo {...info.system} />
-        <Button
-          loading={loading}
-          onClick={refresh}
-          leftIcon={<IconRefresh />}
-          variant="light"
-        >
+        <Button loading={loading} onClick={getSystemInfo} variant="light">
           Refresh
         </Button>
       </Flex>
@@ -49,12 +53,8 @@ function App() {
           direction="row"
           wrap="wrap"
         >
-          {info?.disks?.length &&
-            info?.disks.map((disk) => (
-              <>
-                <Disk key={disk.name} disk={disk} />
-              </>
-            ))}
+          {info?.disks &&
+            info?.disks.map((disk) => <Disk key={disk.name} {...disk} />)}
         </Flex>
       </Skeleton>
     </>
