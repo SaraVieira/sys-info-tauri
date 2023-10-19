@@ -16,7 +16,7 @@ I am a founding engineer at [axo.dev](https://axo.dev)
 
 ### Let's talk about tauri
 
-<img src="https://i.imgur.com/itO05re.png" style="max-width: 60vw"/>
+<img src="./static/itO05re.png" style="max-width: 60vw"/>
 
 ---
 
@@ -29,6 +29,8 @@ A bigger overlap than you may think
 ### Livecoding and prayers
 
 ---
+
+<img src="./static/qrcode_github.com.png" style="max-width: 60vw"/>
 
 [github.com/SaraVieira/sys-info-tauri](https://github.com/SaraVieira/sys-info-tauri)
 
